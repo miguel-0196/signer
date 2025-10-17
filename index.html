@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Customizer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: #333;
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .controls {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            color: #444;
+        }
+
+        .control-label i {
+            color: #6a11cb;
+            font-size: 1.4rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .control-input {
+            flex: 1;
+        }
+
+        input, select, textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #colorPicker {
+            width: 50px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #fontSize {
+            flex: 1;
+        }
+
+        #fontSizeValue {
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+            background: #6a11cb;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        textarea {
+            resize: vertical;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #textPreview {
+            flex: 1;
+            padding: 40px;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            background-color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            resize: vertical;
+            font-family: 'Font1', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 144px;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .preview-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .preview-title h2 i {
+            color: #6a11cb; /* Restored preview icon color */
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: #5a0db3;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background-color: #e74c3c;
+        }
+
+        .btn-reset:hover {
+            background-color: #c0392b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eaeaea;
+            background-color: #f8f9fa; /* Light color for footer */
+            flex-shrink: 0;
+        }
+
+        /* Font face definitions for TTF fonts */
+        @font-face { font-family: 'Test'; src: url('fonts/Test.ttf'); }
+        @font-face { font-family: 'Test_Tidy'; src: url('fonts/Test_out.ttf'); }
+        @font-face { font-family: 'SBG'; src: url('fonts/SBG.ttf'); }
+        @font-face { font-family: 'SBG_Tidy'; src: url('fonts/SBG_out.ttf'); }
+
+        @font-face { font-family: 'Allison'; src: url('fonts/Allison_Script.otf'); }
+        @font-face { font-family: 'Amsterdam'; src: url('fonts/Amsterdam Handwriting.ttf'); }
+        @font-face { font-family: 'Anthony'; src: url('fonts/Anthony Gilford.otf'); }
+        @font-face { font-family: 'Bastliga'; src: url('fonts/Bastliga One.ttf'); }
+        @font-face { font-family: 'Brittany'; src: url('fonts/BrittanySignatureScript.ttf'); }
+        @font-face { font-family: 'Californian'; src: url('fonts/Californian Signature.otf'); }
+        @font-face { font-family: 'Creattion'; src: url('fonts/Creattion Demo.otf'); }
+        @font-face { font-family: 'Dalton'; src: url('fonts/Dalton White.otf'); }
+        @font-face { font-family: 'Fallin'; src: url('fonts/Fallin For You Script.otf'); }
+        @font-face { font-family: 'Gateway'; src: url('fonts/Gateway Signature.ttf'); }
+        @font-face { font-family: 'Hamburg'; src: url('fonts/Hamburg Signature.otf'); }
+        @font-face { font-family: 'Empathy'; src: url('fonts/High Empathy.ttf'); }
+        @font-face { font-family: 'Jackson'; src: url('fonts/Jackson Signature.ttf'); }
+        @font-face { font-family: 'Mandalica'; src: url('fonts/Mandalica.ttf'); }
+        @font-face { font-family: 'OTF'; src: url('fonts/OTF.otf'); }
+        @font-face { font-family: 'OceanTrace'; src: url('fonts/OceanTrace.ttf'); }
+        @font-face { font-family: 'Octavian'; src: url('fonts/Octavian Signature.ttf'); }
+        @font-face { font-family: 'Palisade'; src: url('fonts/Palisade.otf'); }
+        @font-face { font-family: 'Paragraph'; src: url('fonts/Paragraph.otf'); }
+        @font-face { font-family: 'Priestacy'; src: url('fonts/Priestacy.otf'); }
+        @font-face { font-family: 'Rizaldi'; src: url('fonts/Rizaldi Script Demo.otf'); }
+        @font-face { font-family: 'Rocket'; src: url('fonts/Rocket Clouds.ttf'); }
+        @font-face { font-family: 'Royalty'; src: url('fonts/Royalty Free.ttf'); }
+        @font-face { font-family: 'SanBrainy'; src: url('fonts/SanBrainy.otf'); }
+        @font-face { font-family: 'Signatie'; src: url('fonts/Signatie.otf'); }
+        @font-face { font-family: 'Southwest'; src: url('fonts/Southwest Partisan Demo.otf'); }
+        @font-face { font-family: 'StoryOfLove'; src: url('fonts/StoryOfLove.ttf'); }
+        @font-face { font-family: 'Thesignature'; src: url('fonts/Thesignature.ttf'); }
+        @font-face { font-family: 'Wistania'; src: url('fonts/Wistania.ttf'); }
+        @font-face { font-family: 'Modernline_Bold'; src: url('fonts/modernline bold.otf'); }
+        @font-face { font-family: 'Modernline'; src: url('fonts/modernline.otf'); }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .control-group {
+                flex: 0 0 calc(50% - 10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .control-group {
+                flex: 1;
+                width: 100%;
+            }
+            
+            .preview-title {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            #textPreview {
+                font-size: 80px;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #textPreview {
+                font-size: 60px;
+            }
+            
+            .content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Text Customizer</h1>
+        </header>
+        
+        <div class="content">
+            <div class="controls">
+                <div class="control-group">
+                    <div class="control-label">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <div class="control-input">
+                        <select id="fontFamily">
+                            <option value="Allison">Allison</option>
+                            <option value="Amsterdam">Amsterdam</option>
+                            <option value="Anthony">Anthony</option>
+                            <option value="Bastliga">Bastliga</option>
+                            <option value="Brittany">Brittany</option>
+                            <option value="Californian">Californian</option>
+                            <option value="Creattion">Creattion</option>
+                            <option value="Dalton">Dalton</option>
+                            <option value="Empathy">Empathy</option>
+                            <option value="Fallin">Fallin</option>
+                            <option value="Gateway">Gateway</option>
+                            <option value="Hamburg">Hamburg</option>
+                            <option value="Jackson">Jackson</option>
+                            <option value="Mandalica">Mandalica</option>
+                            <option value="Modernline">Modernline</option>
+                            <option value="Modernline_Bold">Modernline(bold)</option>
+                            <option value="OceanTrace">OceanTrace</option>
+                            <option value="Octavian">Octavian</option>
+                            <option value="OTF">OTF</option>
+                            <option value="Palisade">Palisade</option>
+                            <option value="Paragraph">Paragraph</option>
+                            <option value="Priestacy">Priestacy</option>
+                            <option value="Rizaldi">Rizaldi</option>
+                            <option value="Rocket">Rocket</option>
+                            <option value="Royalty">Royalty</option>
+                            <option value="SanBrainy">SanBrainy</option>
+                            <option value="SBG">SBG</option>
+                            <option value="SBG_Tidy">SBG(tidy)</option>
+                            <option value="Signatie">Signatie</option>
+                            <option value="Southwest">Southwest</option>
+                            <option value="StoryOfLove">StoryOfLove</option>
+                            <option value="Test">Test</option>
+                            <option value="Test_Tidy">Test(tidy)</option>
+                            <option value="Thesignature">Thesignature</option>
+                            <option value="Thesignature">Thesignature</option>
+                            <option value="Wistania">Wistania</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="control-input">
+                        <div class="color-picker-container">
+                            <input type="color" id="colorPicker" value="#000000">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="control-input">
+                        <div class="range-container">
+                            <input type="range" id="fontSize" min="12" max="288" value="144">
+                            <span id="fontSizeValue">144px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview">
+                <div class="preview-title">
+                    <h2><i class="fas fa-eye"></i> Preview</h2>
+                    <div class="action-buttons">
+                        <button class="btn" id="copyBtn">
+                            <i class="fas fa-copy"></i> Copy Text
+                        </button>
+                        <button class="btn btn-reset" id="resetBtn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                <textarea id="textPreview">Create beautiful text!</textarea>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Text Customizer &copy; 2023 | All fonts are loaded from the local 'fonts' directory</p>
+        </footer>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const textPreview = document.getElementById('textPreview');
+        const colorPicker = document.getElementById('colorPicker');
+        const fontSize = document.getElementById('fontSize');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        const fontFamily = document.getElementById('fontFamily');
+        const copyBtn = document.getElementById('copyBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Initialize with default values
+        updatePreview();
+
+        // Event listeners
+        textPreview.addEventListener('input', updatePreview);
+        colorPicker.addEventListener('input', function() {
+            updatePreview();
+        });
+        fontSize.addEventListener('input', function() {
+            fontSizeValue.textContent = this.value + 'px';
+            updatePreview();
+        });
+        fontFamily.addEventListener('change', updatePreview);
+        
+        // Copy styled text to clipboard
+        copyBtn.addEventListener('click', function() {
+            const textToCopy = textPreview.value;
+            
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert('Failed to copy text to clipboard');
+                });
+        });
+
+        // Reset all settings
+        resetBtn.addEventListener('click', function() {
+            textPreview.value = 'Create beautiful text!';
+            colorPicker.value = '#000000';
+            fontSize.value = 144;
+            fontSizeValue.textContent = '144px';
+            fontFamily.value = 'Allison';
+            updatePreview();
+        });
+
+        // Update the preview based on current settings
+        function updatePreview() {
+            textPreview.style.color = colorPicker.value;
+            textPreview.style.fontSize = fontSize.value + 'px';
+            textPreview.style.fontFamily = fontFamily.value;
+        }
+    </script>
+</body>
+</html>
